@@ -1,8 +1,9 @@
 # Large data files
 DATA/
 
-# Parquet data files (LFS pointer files, not actual data)
+# Parquet data files — streamlit/data/ 제외하고 무시
 *.parquet
+!streamlit/data/*.parquet
 
 # Python
 __pycache__/
