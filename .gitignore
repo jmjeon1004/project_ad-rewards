@@ -1,9 +1,10 @@
 # Large data files
 DATA/
 
-# Parquet data files — streamlit/data/ 제외하고 무시
+# Parquet data files — streamlit/data/, streamlit/models/ 제외하고 무시
 *.parquet
 !streamlit/data/*.parquet
+!streamlit/models/rag_artifacts/*.parquet
 
 # Python
 __pycache__/
