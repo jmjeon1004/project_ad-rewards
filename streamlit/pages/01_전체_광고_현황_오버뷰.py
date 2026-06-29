@@ -71,7 +71,7 @@ date_max = base["rpt_time_date"].max()
 # ════════════════════════════════════════════════════
 _current_view_mode = st.session_state.get("p1_view_mode") or "전체 기간"
 
-st.image("assets/logo.png", width=120)
+st.image(str(__import__('pathlib').Path(__file__).parent.parent / "assets" / "logo.png"), width=120)
 col_title, col_date = st.columns([3, 1])
 with col_title:
     st.markdown("## 전체 광고 현황 오버뷰")

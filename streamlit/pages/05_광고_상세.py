@@ -5,7 +5,7 @@ import numpy as np
 import base64
 from pathlib import Path
 
-_logo_b64 = base64.b64encode(Path("assets/logo.png").read_bytes()).decode()
+_logo_b64 = base64.b64encode((Path(__file__).parent.parent / "assets" / "logo.png").read_bytes()).decode()
 
 # ── CSS ──
 st.markdown("""
