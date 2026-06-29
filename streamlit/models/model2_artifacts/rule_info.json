@@ -1,0 +1,5 @@
+{
+  "min_early_click": 10,
+  "below_min_handling": "rule_based_decline (ML 예측 미적용, 별도 관리)",
+  "description": "early_click < 10 광고는 관측 부족으로 ML 판단 보류"
+}

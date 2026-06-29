@@ -1,0 +1,10 @@
+{
+  "default_05": 0.5,
+  "best_f1": 0.5904874214309964,
+  "recall_targets": {
+    "Recall >= 0.70": 0.5064185975072187,
+    "Recall >= 0.80": 0.38555280742404374
+  },
+  "recommended": "best_f1",
+  "note": "val 기준 탐색값. test에 적용 시 recall이 달라질 수 있음 (보장 X)"
+}

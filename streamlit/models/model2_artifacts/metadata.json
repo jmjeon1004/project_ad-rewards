@@ -1,0 +1,39 @@
+{
+  "model_name": "model2_early_decline",
+  "created_at": "2026-05-08T12:55:56.003112",
+  "algorithm": "LGBM",
+  "version_tag": "full",
+  "feature_set": "C_tfidf+click",
+  "n_features": 101,
+  "best_params": {
+    "n_estimators": 234,
+    "learning_rate": 0.013654801962309285,
+    "max_depth": 5,
+    "num_leaves": 23,
+    "min_child_samples": 20,
+    "feature_fraction": 0.588198606965299,
+    "bagging_fraction": 0.5929345494395346,
+    "bagging_freq": 1,
+    "lambda_l1": 4.569501806140246e-06,
+    "lambda_l2": 1.505181311799353e-05,
+    "min_gain_to_split": 0.5463023888259795
+  },
+  "cv_prauc": 0.6184727925196644,
+  "val_prauc": 0.5571822603122898,
+  "test_auc": 0.8547827239003709,
+  "test_prauc": 0.6008534470821825,
+  "test_precision": 0.4351145038167939,
+  "test_recall": 0.6705882352941176,
+  "test_f1": 0.5277777777777778,
+  "seed": 42,
+  "preprocessing_notes": {
+    "clean_col_names": "학습 때 사용한 clean_col_names_unique 함수 동일 적용 필요",
+    "label_encoder_rule": "unseen category는 unknown으로 매핑 (safe_transform 로직)",
+    "category_columns": [
+      "ads_rejoin_type",
+      "ads_action_rule"
+    ],
+    "apply_only_when": "early_click >= 10"
+  },
+  "usage": "운영자 우선순위화 보조 (자동 의사결정 X)"
+}

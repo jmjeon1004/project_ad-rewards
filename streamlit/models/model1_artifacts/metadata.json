@@ -1,0 +1,33 @@
+{
+  "model_name": "model1_quality_grade",
+  "created_at": "2026-05-10T03:20:45.937915",
+  "algorithm": "XGBClassifier",
+  "version_tag": "full",
+  "feature_set": "B_num+ohe",
+  "n_features": 48,
+  "best_params": {
+    "n_estimators": 643,
+    "learning_rate": 0.22329916619526158,
+    "max_depth": 8,
+    "subsample": 0.9247734590358337,
+    "colsample_bytree": 0.6795292369167751,
+    "gamma": 1.0524097192151365,
+    "reg_alpha": 0.00044108827063748764,
+    "reg_lambda": 0.10506932611511502,
+    "min_child_weight": 4
+  },
+  "val_auc": 0.8180499325236168,
+  "val_prauc": 0.6022721433373912,
+  "test_auc": 0.8345992243051067,
+  "test_prauc": 0.6278018613350752,
+  "target_auc": 0.75,
+  "seed": 42,
+  "preprocessing_notes": {
+    "clean_col_names": "학습 때 사용한 clean_col_names_unique 함수 동일 적용 필요",
+    "label_encoder_rule": "unseen category는 unknown으로 매핑 (safe_transform 로직)",
+    "category_columns": [
+      "ads_rejoin_type",
+      "ads_action_rule"
+    ]
+  }
+}
