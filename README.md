@@ -14,7 +14,6 @@
 - [데이터 구성](#데이터-구성)
 - [ML 모델](#ml-모델)
 - [AI Agent](#ai-agent)
-- [성능 최적화](streamlit/OPTIMIZATION.md) (별도 문서)
 
 ---
 
