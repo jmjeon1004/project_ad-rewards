@@ -26,7 +26,7 @@ from src.components import (
     render_kpi_card, render_context_message,
     render_ad_list_table_with_scores, render_ml_insight,
     render_chat_section, render_media_summary_table,
-    render_media_highlight_card, render_media_price_coop_card, render_media_material_card,
+    render_media_highlight_card, render_media_material_card,
 )
 from src.charts import (
     make_bubble_chart,
@@ -282,10 +282,6 @@ with st.container(border=True):
                 unsafe_allow_html=True,
             )
 
-    if insight_cards["price_coop"]:
-        st.markdown("<div style='height:14px;'></div>", unsafe_allow_html=True)
-        render_media_price_coop_card(**insight_cards["price_coop"])
-
     if insight_cards["material"]:
         st.markdown("<div style='height:14px;'></div>", unsafe_allow_html=True)
         render_media_material_card(**insight_cards["material"])
@@ -318,6 +314,9 @@ with st.container(border=True):
         threshold_key=_p3_thr_key,
         opp_top_n=1,
         risk_top_n=1,
+        sched_agg_precomp=st.session_state.get("sched_agg"),
+        early_click_precomp=st.session_state.get("early_click_df"),
+        master_cols_precomp=st.session_state.get("master_cols"),
     )
     render_ml_insight(_p3_insight, page_key="p3")
 

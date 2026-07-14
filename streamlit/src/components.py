@@ -597,7 +597,6 @@ def render_media_highlight_card(icon: str, title: str, media_name: str, color: s
                     btn_bg="#C62828", btn_border="#C62828", btn_c="#FFFFFF"),
     }
     t = theme_map.get(color, theme_map["green"])
-    subtitle = f'"{quote}"' if mode == "trend" else period_label
     card_key = f"media_card_{abs(hash((title, media_name, kpi_col)))}"
 
     st.markdown(f"""
@@ -611,9 +610,13 @@ def render_media_highlight_card(icon: str, title: str, media_name: str, color: s
     """, unsafe_allow_html=True)
 
     with st.container(border=True, key=card_key):
+        subtitle_html = (
+            f'<div style="font-size: 12px; color: #777; margin-top: 4px;">{period_label}</div>'
+            if mode != "trend" else ""
+        )
         st.markdown(f"""
         <div style="font-weight: 700; font-size: 14px; color: {t['title_c']};">{icon} {title}</div>
-        <div style="font-size: 12px; color: #777; margin-top: 4px;">{subtitle}</div>
+        {subtitle_html}
         """, unsafe_allow_html=True)
 
         if mode == "trend":
@@ -637,9 +640,6 @@ def render_media_highlight_card(icon: str, title: str, media_name: str, color: s
                         flex-direction: column; justify-content: center; margin-top: 8px;">
                 <div style="background: {t['badge_bg']}; color: {t['badge_c']}; font-size: 12px; font-weight: 600;
                             border-radius: 8px; padding: 8px 12px; text-align: center;">{badge_text}</div>
-                <div style="background: {t['btn_bg']}; color: {t['btn_c']}; border: 1.5px solid {t['btn_border']};
-                            border-radius: 8px; padding: 8px 12px; text-align: center; font-size: 13px;
-                            font-weight: 600; margin-top: 10px;">{button_label} ↗</div>
             </div>
             """, unsafe_allow_html=True)
         else:
@@ -693,11 +693,7 @@ def render_media_price_coop_card(title: str, subtitle: str, rows: pd.DataFrame):
 
     st.markdown(f"""
     <div style="border: 1.5px solid {COLORS['border']}; border-radius: 12px; padding: 16px 18px;">
-        <div style="display:flex; justify-content:space-between; align-items:baseline;">
-            <span style="font-weight:700; font-size:14px; color:#333;">⚖ {title}</span>
-            <span style="font-size:11px; color:#888;">{subtitle}</span>
-        </div>
-        <div style="font-size:12px; color:#777; margin-top:4px;">
+        <div style="font-size:12px; color:#777;">
             "평균 대비 뭐가 아쉬운가, 어디부터 손볼까" — 단일 수치보다 그룹 내 상대 비교가 먼저 필요
         </div>
         <div style="display:flex; padding:8px 4px 6px 4px; font-size:11px; color:#999;
@@ -717,12 +713,12 @@ def render_media_price_coop_card(title: str, subtitle: str, rows: pd.DataFrame):
 
 
 def render_media_material_card(media_name: str, quote: str, margin_val: float, margin_caption: str,
-                                cvr_val: float, cvr_caption: str, insight_text: str, button_label: str):
+                                cvr_val: float, cvr_caption: str, insight_text: str, button_label: str,
+                                insight_action: str | None = None):
     """소재 개선 카드 — 마진율/CVR 비교 KPI + 인사이트 텍스트 + CTA."""
     st.markdown(f"""
     <div style="border: 1.5px solid #B39DDB; border-radius: 12px; padding: 16px 18px;">
         <div style="font-weight:700; font-size:14px; color:#5E35B1;">☼ 소재 개선·{media_name}</div>
-        <div style="font-size:12px; color:#777; margin-top:4px;">"{quote}" — CVR과 마진율을 분리해서 비교</div>
         <div style="display:flex; gap:16px; margin-top:14px;">
             <div style="flex:1; text-align:center; background:#F5F3FB; border-radius:10px; padding:14px 8px;">
                 <div style="font-size:12px; color:#888;">마진율</div>
@@ -735,10 +731,11 @@ def render_media_material_card(media_name: str, quote: str, margin_val: float, m
                 <div style="font-size:11px; color:#E65100; margin-top:2px;">{cvr_caption}</div>
             </div>
         </div>
-        <div style="background:#EDE7F6; color:#4527A0; font-size:12px; border-radius:8px;
-                    padding:10px 12px; margin-top:12px;">{insight_text}</div>
-        <div style="border:1.5px solid #B39DDB; border-radius:8px; padding:8px 12px; text-align:center;
-                    font-size:13px; font-weight:600; color:#5E35B1; margin-top:10px;">{button_label} ↗</div>
+        <div style="background:#F5F3FB; border-radius:8px; padding:10px 12px; margin-top:12px;
+                    border-left: 4px solid #7C4DFF;">
+            <div style="font-size:12px; font-weight:700; color:#4527A0;">💡 {insight_text}</div>
+            {f'<div style="font-size:11px; color:#555; margin-top:4px;">{insight_action}</div>' if insight_action else ""}
+        </div>
     </div>
     """, unsafe_allow_html=True)
 

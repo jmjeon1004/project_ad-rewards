@@ -104,6 +104,9 @@ def prepare_ml_insight_data(
     threshold_key: str = "best_f1",
     opp_top_n: int = 4,
     risk_top_n: int = 4,
+    sched_agg_precomp: pd.DataFrame | None = None,
+    early_click_precomp: pd.DataFrame | None = None,
+    master_cols_precomp: pd.DataFrame | None = None,
 ) -> dict:
     """
     ML 인사이트 섹션에 필요한 모든 데이터를 준비.
@@ -164,18 +167,25 @@ def prepare_ml_insight_data(
     ad_agg["cvr"] = np.where(ad_agg["clk"] > 0, ad_agg["turn"] / ad_agg["clk"] * 100, np.nan)
     ad_agg["cpa"] = np.where(ad_agg["turn"] > 0, ad_agg["acost"] / ad_agg["turn"], np.nan)
 
-    # ad_master에서 mentioned_media_cnt, ads_reward_price 가져오기
-    master_cols = ad_master[["ads_idx", "mentioned_media_cnt", "ads_reward_price"]].drop_duplicates("ads_idx")
+    # 사전 집계 값 사용 (없으면 즉석 계산)
+    if master_cols_precomp is not None:
+        master_cols = master_cols_precomp
+    else:
+        master_cols = ad_master[["ads_idx", "mentioned_media_cnt", "ads_reward_price"]].drop_duplicates("ads_idx")
 
-    # sched에서 campaign_n_day (최대값), early_click (D+3 이내 클릭합)
-    sched_agg = sched.groupby("ads_idx").agg(
-        campaign_n_day_max=("campaign_n_day", "max"),
-        total_clicks_sched=("click_cnt", "sum"),
-    ).reset_index()
+    if sched_agg_precomp is not None:
+        sched_agg = sched_agg_precomp
+    else:
+        sched_agg = sched.groupby("ads_idx").agg(
+            campaign_n_day_max=("campaign_n_day", "max"),
+            total_clicks_sched=("click_cnt", "sum"),
+        ).reset_index()
 
-    # early_click: D+3 이내 클릭
-    early = sched[sched["campaign_n_day"] < 3].groupby("ads_idx")["click_cnt"].sum().reset_index()
-    early.columns = ["ads_idx", "early_click"]
+    if early_click_precomp is not None:
+        early = early_click_precomp
+    else:
+        early = sched[sched["campaign_n_day"] < 3].groupby("ads_idx")["click_cnt"].sum().reset_index()
+        early.columns = ["ads_idx", "early_click"]
 
     # S/A 기회 광고 조립
     opp = sa_scores.merge(ad_agg, on="ads_idx", how="left")

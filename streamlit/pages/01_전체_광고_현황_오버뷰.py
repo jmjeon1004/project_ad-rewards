@@ -71,7 +71,7 @@ date_max = base["rpt_time_date"].max()
 # ════════════════════════════════════════════════════
 _current_view_mode = st.session_state.get("p1_view_mode") or "전체 기간"
 
-st.image(str(__import__('pathlib').Path(__file__).parent.parent / "assets" / "logo.png"), width=120)
+st.image("assets/logo.png", width=120)
 col_title, col_date = st.columns([3, 1])
 with col_title:
     st.markdown("## 전체 광고 현황 오버뷰")
@@ -206,6 +206,9 @@ if view_mode == "전체 기간":
             classification=classification,
             page_name="전체 오버뷰",
             threshold_key=_p1_thr_key,
+            sched_agg_precomp=st.session_state.get("sched_agg"),
+            early_click_precomp=st.session_state.get("early_click_df"),
+            master_cols_precomp=st.session_state.get("master_cols"),
         )
         render_ml_recommendation_banner(_p1_insight, page_key="p1")
 

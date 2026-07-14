@@ -1,1 +1,5 @@
-# No LFS tracking - handle data files separately
+streamlit/data/finance_clean1.parquet filter=lfs diff=lfs merge=lfs -text
+streamlit/data/finance_clean2.parquet filter=lfs diff=lfs merge=lfs -text
+streamlit/data/ads_join_info_labeled.parquet filter=lfs diff=lfs merge=lfs -text
+streamlit/data/main_funnel.parquet filter=lfs diff=lfs merge=lfs -text
+*.parquet filter=lfs diff=lfs merge=lfs -text

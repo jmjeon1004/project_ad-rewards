@@ -1,5 +1,5 @@
 # Large data files
-DATA/
+/DATA/
 
 # Parquet data files — streamlit/data/, streamlit/models/ 제외하고 무시
 *.parquet

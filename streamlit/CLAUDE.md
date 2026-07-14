@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 아이브코리아 광고운영 최적화 대시보드 — Streamlit 기반 5페이지 멀티페이지 앱으로, 광고 성과 분석 + XGBoost M1 품질등급(S/A/B/C/D) + LightGBM M2 조기부진 예측 + AI-agent 자연어 질의를 결합한 운영 의사결정 지원 도구.
 
-PRD는 `PRD_v2_3.md`에 있으며, 와이어프레임 이미지는 `와이어프레임/` 디렉토리에 있다. 구현 전 반드시 PRD를 참조할 것.
+PRD는 `PRD_v2_4.md`(최신, 현재 코드 기준)에 있으며, 이전 버전은 `PRD_v2_3.md`/`PRD_current.md`로 보존되어 있다. 와이어프레임 이미지는 `와이어프레임/` 디렉토리에 있다. 구현 전 반드시 최신 PRD를 참조할 것.
 
 ## Architecture
 

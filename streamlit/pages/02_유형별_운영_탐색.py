@@ -490,6 +490,9 @@ with st.container(border=True):
         threshold_key=_p2_thr_key,
         opp_top_n=1,
         risk_top_n=1,
+        sched_agg_precomp=st.session_state.get("sched_agg"),
+        early_click_precomp=st.session_state.get("early_click_df"),
+        master_cols_precomp=st.session_state.get("master_cols"),
     )
     render_ml_insight(_p2_insight, page_key="p2")
 

@@ -43,9 +43,7 @@ def load_ad_classification() -> pd.DataFrame:
 
 @st.cache_resource(show_spinner="완료 결과 로딩 중...")
 def load_ad_outcome() -> pd.DataFrame:
-    path = os.path.join(DATA_DIR, "ad_outcome.parquet")
-    df = pd.read_parquet(path)
-    return df[["ads_idx", "avg_ctit"]].copy()
+    return load_ad_outcome_full()[["ads_idx", "avg_ctit"]].copy()
 
 
 @st.cache_resource(show_spinner="퍼널 데이터 로딩 중...")

@@ -281,7 +281,7 @@ def build_media_insight_cards(
             spend_action = (
                 "비중이 커서 정밀 진단이 필요 — 단가 재협의를 우선 검토"
                 if share_pct >= 30
-                else "여기서 빼서 올릴 예산 자체가 미미함 — 정밀 진단보다 타 매체 우선순위 판단이 먼저"
+                else f"{name} 예산을 재배분해도 효과가 미미합니다. 다른 매체 성과 개선을 우선 검토하세요."
             )
             result["loss"] = dict(
                 icon="⚠", title=f"비효율·{name}", media_name=name, mode="spend",
@@ -327,7 +327,8 @@ def build_media_insight_cards(
             media_name=name, quote="마진은 괜찮은데 전환이 약한 이유는?",
             margin_val=margin_val, margin_caption=margin_caption,
             cvr_val=cvr_val, cvr_caption=cvr_caption,
-            insight_text="전환은 늘지 않는데 단가효율은 유지 — 소재 또는 타겟 피로 의심",
+            insight_text="전환은 낮지만 단가효율은 유지 — 소재 또는 타겟 피로 가능성",
+            insight_action="소재 자체보다 타겟 범위를 먼저 점검하세요",
             button_label="소재/타겟 개선안",
         )
 
