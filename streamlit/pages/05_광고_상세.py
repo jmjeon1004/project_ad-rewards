@@ -12,7 +12,6 @@ st.markdown("""
 <style>
     .block-container { padding-top: 3rem; }
     [data-testid="stSidebar"] { min-width: 200px; }
-    [data-testid="stSidebarNavItems"] li:last-child { display: none; }
 
     :root {
         --bg: #FFFFFF;
