@@ -237,9 +237,9 @@ def build_hero_content(
         s_cut = grade_info["bins"][4] if grade_info else 80.7
         gap = max(0, s_cut - m1_score)
         return {
-            "label": "S 등급 경계 광고",
-            "headline": f"{grade} 등급 상위 <span style='color:#B57C00;'>{m1_score:.0f}점</span> — S 진입 cutpoint {s_cut:.0f}점에 {gap:.1f}점 차이",
-            "explain": "S 등급 경계에 위치한 우수 광고 — 추가 운영·개입 시 S 진입 가능성. 미리 인지·준비 권장.",
+            "label": "S 등급 승급 후보",
+            "headline": f"{grade} 등급 <span style='color:#B57C00;'>{m1_score:.0f}점</span> — S 진입 cutpoint {s_cut:.0f}점까지 {gap:.1f}점 차이",
+            "explain": "A 등급 광고 — 추가 운영·개입으로 점수가 오르면 S 진입 가능성이 있어요. 미리 인지·준비 권장.",
         }
     elif badge == "즉시조치":
         return {
@@ -289,12 +289,12 @@ def build_why_steps(
         s_cut = grade_info["bins"][4] if grade_info else 80.7
         gap = max(0, s_cut - m1_score)
         return [
-            {"num": "1", "title": "A 등급 상위에 위치한 우수 광고예요",
-             "text": f"점수 {m1_score:.1f}점 · CVR·마진율 모두 같은 유형 평균 이상", "caveat": False},
-            {"num": "2", "title": "S 진입 cutpoint와 가까워요",
-             "text": f"{gap:.1f}점 차이 · 추가 운영·개입(매체 확장·소재 최적화 등) 시 S 진입 가능성 충분", "caveat": False},
-            {"num": "!", "title": "근접해 있을 뿐 진입 보장 아니에요",
-             "text": f"{gap:.1f}점 차이는 모델 변동성 범위 안일 수 있어요. <strong>S 진입을 보장하는 게 아닌 \"가까운 위치\"라는 정보</strong>로 활용 권장.", "caveat": True},
+            {"num": "1", "title": "A 등급 광고예요",
+             "text": f"점수 {m1_score:.1f}점 · S 등급(정상 운영 중 가장 우수한 등급) 바로 아래 등급", "caveat": False},
+            {"num": "2", "title": "S 진입 cutpoint까지 남은 점수",
+             "text": f"{gap:.1f}점 차이 · 추가 운영·개입(매체 확장·소재 최적화 등)으로 점수가 오르면 S 진입 가능", "caveat": False},
+            {"num": "!", "title": "점수 차이가 클수록 진입 가능성은 낮아요",
+             "text": f"{gap:.1f}점 차이가 작을수록(모델 변동성 범위 안일수록) 실현 가능성이 높아요. <strong>S 진입을 보장하는 정보가 아니라 \"현재 위치\"라는 참고 정보</strong>로 활용 권장.", "caveat": True},
         ]
     elif badge == "즉시조치":
         return [

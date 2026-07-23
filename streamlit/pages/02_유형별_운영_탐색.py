@@ -248,20 +248,15 @@ with st.container(border=True):
     _opd_has_m2 = "m2_decision" in _opd_agg.columns
 
     if _opd_has_m1:
-        if "m1_score" in _opd_agg.columns:
-            _opd_agg["opd_grade"] = np.where(
-                _opd_agg["m1_grade"] == "D", "즉시조치",
-                np.where(
-                    (_opd_agg["m1_grade"] == "A") & (_opd_agg["m1_score"] >= 75),
-                    "승급추진",
-                    np.where(_opd_agg["m1_grade"].isin(["S", "A"]), "매체확장", None),
-                ),
-            )
-        else:
-            _opd_agg["opd_grade"] = np.where(
-                _opd_agg["m1_grade"] == "D", "즉시조치",
-                np.where(_opd_agg["m1_grade"].isin(["S", "A"]), "매체확장", None),
-            )
+        # S등급→매체확장, A등급→승급추진 (근거: src/ml_insight_data.py의 _assign_opportunity_badge 참고 —
+        # A등급 내부 점수 컷은 실제 성과와 무관함이 검증되어 폐기, S/A 등급 경계만 사용)
+        _opd_agg["opd_grade"] = np.where(
+            _opd_agg["m1_grade"] == "D", "즉시조치",
+            np.where(
+                _opd_agg["m1_grade"] == "A", "승급추진",
+                np.where(_opd_agg["m1_grade"] == "S", "매체확장", None),
+            ),
+        )
     else:
         _opd_agg["opd_grade"] = None
 

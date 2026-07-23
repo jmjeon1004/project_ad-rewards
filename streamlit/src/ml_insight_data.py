@@ -51,16 +51,14 @@ def reapply_threshold(scores_df: pd.DataFrame, threshold_value: float) -> pd.Dat
 # ── 기회 광고 배지 로직 ──
 
 def _assign_opportunity_badge(row: pd.Series) -> str:
-    """S/A 등급 광고에 기회 배지 부여 (우선순위: 승급추진 > 매체확장)."""
+    """S/A 등급 광고에 기회 배지 부여 (S등급→매체확장, A등급→승급추진).
+
+    A등급 내부를 점수로 나누는 방식(구 75점 컷)은 실제 성과(CVR/decline_risk)로
+    검증한 결과 유의미한 분리 근거가 없어 폐기함. 대신 통계적으로 유의미한 차이가
+    확인된 S/A 등급 경계(Mann-Whitney U, CVR 기준 p=0.027)를 그대로 배지 경계로 사용한다.
+    """
     grade = row.get("m1_grade", "")
-
-    # 승급추진: A등급 + 75점 이상 (S등급 근접)
-    score = row.get("m1_score", 0)
-    if grade == "A" and pd.notna(score) and score >= 75:
-        return "승급추진"
-
-    # 매체확장: S등급 또는 나머지 A등급
-    return "매체확장"
+    return "승급추진" if grade == "A" else "매체확장"
 
 
 # ── 위험 광고 배지 로직 ──
@@ -192,12 +190,8 @@ def prepare_ml_insight_data(
     opp = opp.merge(master_cols, on="ads_idx", how="left")
     opp = opp.merge(sched_agg, on="ads_idx", how="left")
 
-    # 배지 부여 (벡터화)
-    opp["opp_badge"] = np.where(
-        (opp["m1_grade"] == "A") & (opp["m1_score"] >= 75),
-        "승급추진",
-        "매체확장",
-    )
+    # 배지 부여 (벡터화) — S등급→매체확장, A등급→승급추진 (근거: _assign_opportunity_badge 참고)
+    opp["opp_badge"] = np.where(opp["m1_grade"] == "A", "승급추진", "매체확장")
 
     # 카운트
     media_count = int((opp["opp_badge"] == "매체확장").sum())
