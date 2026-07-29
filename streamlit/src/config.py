@@ -30,6 +30,7 @@ PIPELINE_PATH = os.path.join(MODELS_DIR, "preprocessing_pipeline.joblib")
 RAG_DOCS_DIR = os.path.join(DATA_DIR, "rag_docs")
 RAG_ARTIFACTS = os.path.join(MODELS_DIR, "rag_artifacts")
 RAG_INDEX_PATH = os.path.join(RAG_ARTIFACTS, "index.parquet")
+RAG_REPORTS_DIR = os.path.join(RAG_DOCS_DIR, "reports")  # 누적 저장되는 일일 리포트
 
 # ── ML 모델 등급 색상 (S/A/B/C/D) ──
 ML_GRADE_COLORS = {

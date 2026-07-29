@@ -54,7 +54,7 @@ def _chunk_doc(path: str) -> list[dict]:
 
 
 def main():
-    paths = sorted(glob.glob(os.path.join(RAG_DOCS_DIR, "*.md")))
+    paths = sorted(glob.glob(os.path.join(RAG_DOCS_DIR, "**", "*.md"), recursive=True))
     if not paths:
         print(f"문서가 없습니다: {RAG_DOCS_DIR}")
         return

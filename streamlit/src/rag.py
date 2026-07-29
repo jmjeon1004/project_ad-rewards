@@ -11,7 +11,7 @@ import streamlit as st
 from google import genai
 from google.genai import types
 
-from src.config import RAG_INDEX_PATH
+from src.config import RAG_ARTIFACTS, RAG_INDEX_PATH, RAG_REPORTS_DIR
 
 EMBED_MODEL = "gemini-embedding-001"
 _SIMILARITY_THRESHOLD = 0.65
@@ -77,3 +77,45 @@ def retrieve(query: str, top_k: int = 4) -> list[dict]:
             "score": score,
         })
     return results
+
+
+def save_daily_report(date_str: str, report_text: str) -> bool:
+    """생성된 일일 리포트를 지식베이스에 누적 저장한다 (파일 + 인덱스 즉시 반영).
+
+    같은 날짜에 재생성되면 기존 버전을 덮어써서, 하루 1건만 "과거 리포트"로 남는다.
+    임베딩 호출이 실패해도 파일은 저장되어(다음 수동 build_rag_index.py 실행 시 반영 가능)
+    채팅 흐름 자체가 막히지 않는다.
+    """
+    doc_name = f"daily_report_{date_str}.md"
+    section = "일일 리포트"
+    full_text = f"# {date_str} 일일 광고 해석 리포트\n\n{report_text}"
+
+    os.makedirs(RAG_REPORTS_DIR, exist_ok=True)
+    with open(os.path.join(RAG_REPORTS_DIR, doc_name), "w", encoding="utf-8") as f:
+        f.write(full_text)
+
+    try:
+        client = _get_client()
+        resp = client.models.embed_content(
+            model=EMBED_MODEL,
+            contents=full_text,
+            config=types.EmbedContentConfig(task_type="RETRIEVAL_DOCUMENT"),
+        )
+        embedding = np.array(resp.embeddings[0].values)
+    except Exception:
+        return False
+
+    index = _load_index()
+    new_row = pd.DataFrame([{
+        "doc": doc_name, "section": section, "text": full_text, "embedding": embedding,
+    }])
+    if index is None:
+        df = new_row
+    else:
+        df, _ = index
+        df = pd.concat([df[df["doc"] != doc_name], new_row], ignore_index=True)
+
+    os.makedirs(RAG_ARTIFACTS, exist_ok=True)
+    df.to_parquet(RAG_INDEX_PATH, index=False)
+    _load_index.clear()  # 다음 retrieve() 호출부터 갱신된 인덱스를 다시 로드
+    return True

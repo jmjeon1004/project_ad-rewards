@@ -1731,14 +1731,24 @@ def render_chat_section(
         query = user_input.strip()
 
         # 데이터 컨텍스트 구성 (lazy import to avoid slow google.genai at startup)
-        from src.agent import build_data_context, generate_response
-        from src.rag import retrieve
+        from src.agent import (
+            build_data_context, build_daily_period_context, format_report_markdown,
+            generate_response, is_daily_report_request, is_valid_report_result,
+        )
+        from src.rag import retrieve, save_daily_report
         ctx = build_data_context(
             ad_summary=ad_summary,
             kpis=kpis,
             page_name=page_name,
             filters_desc=filters_desc,
         )
+
+        # 일일 리포트 요청이면, 현재 페이지 필터(P1은 전체 기간 고정 등)와 무관하게
+        # raw base 테이블에서 직접 오늘 vs 전일 KPI를 계산해 덧붙인다.
+        report_intent = is_daily_report_request(query)
+        if report_intent and "base" in st.session_state and "today" in st.session_state:
+            ctx += build_daily_period_context(st.session_state["base"], st.session_state["today"])
+
         retrieved = retrieve(query)
 
         # Gemini 응답 생성 (현재 메시지는 generate_response 내부에서 추가되므로 history에서 제외)
@@ -1749,6 +1759,13 @@ def render_chat_section(
                 chat_history=st.session_state[history_key],
                 retrieved_chunks=retrieved,
             )
+
+        # 일일 리포트 요청이면 응답을 지식베이스에 누적 저장 (향후 "과거 리포트" 검색 대상)
+        # API 오류/폴백 응답은 저장하지 않는다 (오류 메시지가 리포트로 박제되는 것 방지)
+        if report_intent and is_valid_report_result(result):
+            today = st.session_state.get("today")
+            date_str = today.strftime("%Y-%m-%d") if today is not None else "unknown"
+            save_daily_report(date_str, format_report_markdown(result))
 
         # 사용자 메시지 + AI 응답 추가
         st.session_state[history_key].append({"role": "user", "content": query})

@@ -95,6 +95,23 @@ SECTION_GAP = "<div style='margin-top:1.5rem;'></div>"
 st.markdown(SECTION_GAP, unsafe_allow_html=True)
 
 # ════════════════════════════════════════════════════
+# 오늘의 AI 해석 리포트 (자동 생성 — 질문 없이 페이지 로드 시 바로 노출)
+# ════════════════════════════════════════════════════
+if "_today_report" not in st.session_state:
+    from src.agent import get_or_create_today_report
+    with st.spinner("오늘의 AI 리포트를 준비하는 중..."):
+        st.session_state["_today_report"] = get_or_create_today_report(base, today)
+
+with st.container(border=True):
+    st.markdown("#### 📋 오늘의 AI 해석 리포트")
+    if st.session_state["_today_report"]:
+        st.markdown(st.session_state["_today_report"])
+    else:
+        st.caption("리포트를 생성하지 못했습니다 (일시적 API 오류일 수 있음). 페이지를 새로고침해 다시 시도해 보세요.")
+
+st.markdown(SECTION_GAP, unsafe_allow_html=True)
+
+# ════════════════════════════════════════════════════
 # 보기 모드 토글 (전체 기간 / 당일 vs 평시)
 # ════════════════════════════════════════════════════
 view_mode = st.segmented_control(
